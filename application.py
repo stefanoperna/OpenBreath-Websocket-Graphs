@@ -7,7 +7,7 @@ from threading import Thread, Event
 import serial
 import struct
 import time
-
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -40,13 +40,17 @@ def NumberGenerator():
         # send an R to the arduino
         ser.write("R".encode())
         #read data from arduino culls end of line
-        myData =   ser.readline()[:4]
+        myData =   ser.readline()
         #turns bytes into floats
         number = float(myData.decode()[:-1])
         timestamp = time.time()
 
         print(number)
+        
+        now = datetime.now()
+        timestamp = now.strftime("%H:%M:%S")
         socketio.emit('newnumber', {'number': number, 'timestamp': timestamp}, namespace='/test')
+
         socketio.sleep(0.1)
 
 
