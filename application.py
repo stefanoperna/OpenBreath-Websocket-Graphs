@@ -40,14 +40,17 @@ def NumberGenerator():
         # send an R to the arduino
         ser.write("R".encode())
         #read data from arduino culls end of line
-        myData =   ser.readline()[:4]
+        myData =   ser.readline()
         #turns bytes into floats
-        number = (struct.unpack('f',myData)[0])
+        number = float(myData.decode()[:-1])
+        timestamp = time.time()
 
         print(number)
+        
         now = datetime.now()
-        'now.strftime("%H:%M:%S")
-        socketio.emit('newnumber', {'number': number}, namespace='/test')
+        timestamp = now.strftime("%H:%M:%S")
+        socketio.emit('newnumber', {'number': number, 'timestamp': timestamp}, namespace='/test')
+
         socketio.sleep(0.1)
 
 
