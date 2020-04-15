@@ -42,7 +42,7 @@ def NumberGenerator():
         #read data from arduino culls end of line
         myData =   ser.readline()[:4]
         #turns bytes into floats
-        number = (struct.unpack('f',myData)[0])
+        number = float(myData.decode()[:-1])
         timestamp = time.time()
 
         print(number)
@@ -73,4 +73,3 @@ def test_disconnect():
 
 if __name__ == '__main__':
     socketio.run(app)
-
