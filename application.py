@@ -43,9 +43,10 @@ def NumberGenerator():
         myData =   ser.readline()[:4]
         #turns bytes into floats
         number = (struct.unpack('f',myData)[0])
+        timestamp = time.time()
 
         print(number)
-        socketio.emit('newnumber', {'number': number}, namespace='/test')
+        socketio.emit('newnumber', {'number': number, 'timestamp': timestamp}, namespace='/test')
         socketio.sleep(0.1)
 
 
@@ -72,3 +73,4 @@ def test_disconnect():
 
 if __name__ == '__main__':
     socketio.run(app)
+
