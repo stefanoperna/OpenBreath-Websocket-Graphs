@@ -13,9 +13,10 @@ $(document).ready(function() {
     socket.onmessage = function(event) {
 
         let incomingMessage = event.data;
-        var sensData = JSON.parse(incomingMessage);
-        console.log("event data " + event.data);
-        addData(lineChart, sensData.sensore1.time, sensData.sensore1.data);
+        var sensData = socket.on('newnumber', (number) => {
+        console.log(data);
+        });
+        addData(lineChart, sensData.number, );
         addData(lineChart2, sensData.sensore2.time, sensData.sensore2.data);
         range = range + 0.01;
 
