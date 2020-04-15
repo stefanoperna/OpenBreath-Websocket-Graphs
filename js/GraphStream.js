@@ -7,7 +7,7 @@ $(document).ready(function() {
     createGraph1();
     createGraph2();
 
-    let socket = new WebSocket('ws://localhost:8100');
+    const socket = io('http://localhost');
 
     // handle incoming messages
     socket.onmessage = function(event) {
