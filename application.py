@@ -7,7 +7,7 @@ from threading import Thread, Event
 import serial
 import struct
 import time
-
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -45,6 +45,8 @@ def NumberGenerator():
         number = (struct.unpack('f',myData)[0])
 
         print(number)
+        now = datetime.now()
+        'now.strftime("%H:%M:%S")
         socketio.emit('newnumber', {'number': number}, namespace='/test')
         socketio.sleep(0.1)
 
