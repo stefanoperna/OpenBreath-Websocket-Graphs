@@ -1,6 +1,8 @@
+const SAMPLE_NUM = 300;
 var lineChart;
 var count = 0;
-const SAMPLE_NUM = 300;
+var limSup = 0.5;
+var limInf = -0.3;
 
 $(document).ready(function(){
     //connect to the socket server.
@@ -26,12 +28,12 @@ function createGraph1() {
     var baseLine = [];
     var baseLineLabel = [];
     var step;
-    var range =0;
+    
     for (step = 0; step < SAMPLE_NUM; step++) {
-        limitSupArray.push(0.5);
+        limitSupArray.push(limSup);
         baseLine.push(0);
         baseLineLabel.push('00:00:00');
-        limitInfArray.push(-0.5);
+        limitInfArray.push(limInf);
     }
 
     var ctx = document.getElementById("lineChart").getContext("2d");
@@ -104,21 +106,23 @@ function createGraph1() {
 }
 
 function addData(chart, label, data) {
- 
-    if (count < SAMPLE_NUM - 1){
+    const NULL_NUM = 5;
+    if (count < SAMPLE_NUM - NULL_NUM){
         chart.data.labels[count] = label;
         chart.data.datasets[0].data[count] = data;
-        chart.data.datasets[0].data[count+1] = null;
+        var i;
+        for (i = 1; i < NULL_NUM; i++) {
+            chart.data.datasets[0].data[count+i] = null;
+        } 
     }else{
         chart.data.labels[count] = label;
         chart.data.datasets[0].data[count] = data;
     }
 
-
-    if (Math.abs(data)>0.5){
+    if (data < limInf || data > limSup){
         chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
         chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
-}
+    }
     else{
         chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
         chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
@@ -130,7 +134,7 @@ function addData(chart, label, data) {
     }
     
     count = count + 1;
-    if (count = SAMPLE_NUM){
+    if (count == SAMPLE_NUM){
         count = 0;
     }
     chart.update();
