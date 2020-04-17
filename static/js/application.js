@@ -1,5 +1,6 @@
 var lineChart;
-
+var count = 0;
+const SAMPLE_NUM = 300;
 
 $(document).ready(function(){
     //connect to the socket server.
@@ -22,10 +23,14 @@ function createGraph1() {
 
     var limitSupArray = [];
     var limitInfArray = [];
+    var baseLine = [];
+    var baseLineLabel = [];
     var step;
     var range =0;
-    for (step = 0; step < 300; step++) {
+    for (step = 0; step < SAMPLE_NUM; step++) {
         limitSupArray.push(0.5);
+        baseLine.push(0);
+        baseLineLabel.push('00:00:00');
         limitInfArray.push(-0.5);
     }
 
@@ -33,10 +38,10 @@ function createGraph1() {
     lineChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: [],
+        labels: baseLineLabel,
         datasets: [{
             label: 'SIN',
-            data: [],
+            data: baseLine,
             pointRadius: 0,
             backgroundColor: [
                 'rgba(25, 99, 132, 0.2)'
@@ -100,9 +105,15 @@ function createGraph1() {
 
 function addData(chart, label, data) {
  
-      
-    chart.data.labels.push(label);
-    chart.data.datasets[0].data.push(data);
+    if (count < SAMPLE_NUM - 1){
+        chart.data.labels[count] = label;
+        chart.data.datasets[0].data[count] = data;
+        chart.data.datasets[0].data[count+1] = null;
+    }else{
+        chart.data.labels[count] = label;
+        chart.data.datasets[0].data[count] = data;
+    }
+
 
     if (Math.abs(data)>0.5){
         chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
@@ -116,6 +127,11 @@ function addData(chart, label, data) {
     if (chart.data.datasets[0].data.length === 300){
     chart.data.labels.shift();
     chart.data.datasets[0].data.shift();
+    }
+    
+    count = count + 1;
+    if (count = SAMPLE_NUM){
+        count = 0;
     }
     chart.update();
  
