@@ -1,11 +1,13 @@
 
 var lineChart;
+var lineChart;
 var lineChart2;
 
 $(document).ready(function() {
     console.log("ready!");
     createGraph1();
     createGraph2();
+    createGraph3();
 
     const socket = io('http://localhost');
 
@@ -16,6 +18,7 @@ $(document).ready(function() {
         var sensData = number
         console.log("event data " + event.data);
         addData(lineChart, sensData.sensore1.time, sensData.sensore1.data);
+        addData(lineChart1, sensData.sensore2.time, sensData.sensore2.data);
         addData(lineChart2, sensData.sensore2.time, sensData.sensore2.data);
         range = range + 0.01;
 
@@ -106,6 +109,51 @@ function createGraph1() {
 
 }
 
+function createGraph1() {
+    var ctx1 = document.getElementById("lineChart1").getContext("2d");
+    lineChart2 = new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'COS',
+                data: [],
+                pointRadius: 0,
+                backgroundColor: [
+                    'rgba(25, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(1, 1, 255, 1)'
+                ],
+                borderWidth: 1.5
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+
+                        suggestedMin: -1.5,
+                        suggestedMax: 1.5
+                    },
+                    stacked: false
+                }],
+                xAxes: [{
+                    ticks: {
+                        maxTicksLimit: 4.1,
+                        maxRotation: 0,
+                        minRotation: 0
+                    }
+                }]
+            },
+            animation: {
+                duration: 0
+            }
+        }
+    });
+}
+
+
 
 function createGraph2() {
     var ctx2 = document.getElementById("lineChart2").getContext("2d");
@@ -114,7 +162,7 @@ function createGraph2() {
         data: {
             labels: [],
             datasets: [{
-                label: 'SIN',
+                label: 'TAN',
                 data: [],
                 pointRadius: 0,
                 backgroundColor: [
