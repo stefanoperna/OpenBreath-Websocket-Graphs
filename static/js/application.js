@@ -1,6 +1,11 @@
 var lineChart;
 var lineChart2;
 var lineChart3;
+var count;
+var limSup = 0.5;
+var limInf = -0.3;
+
+const SAMPLE_NUM = 300;
 
 $(document).ready(function(){
     //connect to the socket server.
@@ -94,9 +99,10 @@ function createGraph1() {
         }
         }]
         },
-        animation: {
-            duration: 0
-        }
+            showline: false,
+            animation: {
+                duration: 0
+            }
     }
 });
 
@@ -175,9 +181,10 @@ function createGraph2() {
         }
         }]
         },
-        animation: {
-            duration: 0
-        }
+            showline: false,
+            animation: {
+                duration: 0
+            }
     }
 });
 
@@ -255,9 +262,10 @@ function createGraph3() {
         }
         }]
         },
-        animation: {
-            duration: 0
-        }
+            showline: false,
+            animation: {
+                duration: 0
+            }
     }
 });
 
@@ -266,24 +274,32 @@ function createGraph3() {
 
 
 function addData(chart, label, data) {
- 
+    const NULL_NUM = 5;
+    if (count < SAMPLE_NUM-NULL_NUM){
+      chart.data.labels[count] = label;
+      chart.data.datasets[0].data[count] = data;
+      var i;
+      for (i = 1; i < NULL_NUM; i++) {
+          chart.data.datasets[0].data[count+i] = null;
+      } 
       
-    chart.data.labels.push(label);
-    chart.data.datasets[0].data.push(data);
-
-    if (Math.abs(data)>0.5){
+    }else{
+         chart.data.labels[count] = label;
+         chart.data.datasets[0].data[count] = data;
+    }
+    if (data > limSup || data < limInf) {
         chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
         chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
-}
-    else{
+    } else {
         chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
         chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
     }
- 
-    if (chart.data.datasets[0].data.length === 300){
-    chart.data.labels.shift();
-    chart.data.datasets[0].data.shift();
+
+    count = count + 1;
+    if (count == SAMPLE_NUM){
+       count = 0;
     }
+
     chart.update();
- 
-    } 
+
+}
