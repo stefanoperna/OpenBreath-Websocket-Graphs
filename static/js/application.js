@@ -2,6 +2,8 @@ var lineChart;
 var lineChart2;
 var lineChart3;
 var count;
+var count1;
+var count2;
 var limSup = 0.5;
 var limInf = -0.3;
 
@@ -11,7 +13,9 @@ $(document).ready(function(){
     //connect to the socket server.
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
     var numbers_received = [];
-
+    count = 0;
+    count1 = 0;
+    count2 = 0;
     
     createGraph1();
     createGraph2();
@@ -20,8 +24,8 @@ $(document).ready(function(){
     socket.on('newnumber', function(msg) {
 
           addData(lineChart,msg.timestamp,msg.number);
-          addData(lineChart1,msg.timestamp,msg.number);
-          addData(lineChart2,msg.timestamp,msg.number);
+          addData1(lineChart1,msg.timestamp,msg.number);
+          addData2(lineChart2,msg.timestamp,msg.number);
  
     });
 
@@ -298,6 +302,68 @@ function addData(chart, label, data) {
     count = count + 1;
     if (count == SAMPLE_NUM){
        count = 0;
+    }
+
+    chart.update();
+
+}
+
+function addData1(chart, label, data) {
+    const NULL_NUM = 5;
+    if (count1 < SAMPLE_NUM-NULL_NUM){
+      chart.data.labels[count1] = label;
+      chart.data.datasets[0].data[count1] = data;
+      var i;
+      for (i = 1; i < NULL_NUM; i++) {
+          chart.data.datasets[0].data[count1+i] = null;
+      } 
+      
+    }else{
+         chart.data.labels[count1] = label;
+         chart.data.datasets[0].data[count1] = data;
+    }
+    if (data > limSup || data < limInf) {
+        chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
+        chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
+    } else {
+        chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
+        chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
+    }
+
+    count1 = count1 + 1;
+    if (count1 == SAMPLE_NUM){
+       count1 = 0;
+    }
+
+    chart.update();
+
+}
+
+function addData2(chart, label, data) {
+    const NULL_NUM = 5;
+    if (count2 < SAMPLE_NUM-NULL_NUM){
+      chart.data.labels[count2] = label;
+      chart.data.datasets[0].data[count2] = data;
+      var i;
+      for (i = 1; i < NULL_NUM; i++) {
+          chart.data.datasets[0].data[count2+i] = null;
+      } 
+      
+    }else{
+         chart.data.labels[count2] = label;
+         chart.data.datasets[0].data[count2] = data;
+    }
+    if (data > limSup || data < limInf) {
+        chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
+        chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
+    } else {
+        chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
+        chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
+    }
+
+    count2 = count2 + 1;
+    if (count2 == SAMPLE_NUM){
+       count2 = 0;
     }
 
     chart.update();
