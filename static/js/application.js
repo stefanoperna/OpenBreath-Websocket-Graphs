@@ -23,9 +23,9 @@ $(document).ready(function(){
     //receive details from server
     socket.on('newnumber', function(msg) {
 
-          addData(lineChart,msg.timestamp,msg.number);
-          addData1(lineChart1,msg.timestamp,msg.number);
-          addData2(lineChart2,msg.timestamp,msg.number);
+          addData(lineChart,msg.timestamp,msg.sin);
+          addData1(lineChart1,msg.timestamp,msg.cos);
+          addData2(lineChart2,msg.timestamp,msg.tan);
  
     });
 
