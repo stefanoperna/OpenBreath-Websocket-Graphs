@@ -1,5 +1,6 @@
 var lineChart;
-
+var lineChart2;
+var lineChart3;
 
 $(document).ready(function(){
     //connect to the socket server.
@@ -8,11 +9,14 @@ $(document).ready(function(){
 
     
     createGraph1();
-    
+    createGraph2();
+    createGraph3();
     //receive details from server
     socket.on('newnumber', function(msg) {
 
           addData(lineChart,msg.timestamp,msg.number);
+          addData(lineChart1,msg.timestamp,msg.number);
+          addData(lineChart2,msg.timestamp,msg.number);
  
     });
 
@@ -97,6 +101,169 @@ function createGraph1() {
 });
 
 }
+
+
+function createGraph2() {
+
+    var limitSupArray = [];
+    var limitInfArray = [];
+    var step;
+    var range =0;
+    for (step = 0; step < 300; step++) {
+        limitSupArray.push(0.5);
+        limitInfArray.push(-0.5);
+    }
+
+    var ctx = document.getElementById("lineChart1").getContext("2d");
+    lineChart1 = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'SIN',
+            data: [],
+            pointRadius: 0,
+            backgroundColor: [
+                'rgba(25, 99, 132, 0.2)'
+            ],
+            borderColor: [
+                'rgba(1, 1, 255, 1)'
+            ],
+            borderWidth: 1.5
+        },
+        {
+            label: 'Tresh',
+            data: limitSupArray,
+            pointRadius: 0,
+            backgroundColor: [
+                'rgba(25,0, 0, 0)'
+            ],
+            borderColor: [
+                'rgba(1, 1, 255, 1)'
+            ],
+            borderWidth: 1
+        } ,
+        {
+            label: 'Tresh',
+            data: limitInfArray,
+            pointRadius: 0,
+            backgroundColor: [
+                'rgba(25,0, 0, 0)'
+            ],
+            borderColor: [
+                'rgba(1, 1, 255, 1)'
+            ],
+            borderWidth: 1
+        }
+        ]
+    },
+    options: {
+        scales: {
+        yAxes: [{
+                ticks: {
+
+                    suggestedMin: -1.5,
+                    suggestedMax: 1.5
+                },
+                stacked: false
+            }],
+            xAxes: [{
+            ticks: {
+          maxTicksLimit: 4.1,
+          maxRotation: 0,
+          minRotation: 0
+        }
+        }]
+        },
+        animation: {
+            duration: 0
+        }
+    }
+});
+
+}
+
+function createGraph3() {
+
+    var limitSupArray = [];
+    var limitInfArray = [];
+    var step;
+    var range =0;
+    for (step = 0; step < 300; step++) {
+        limitSupArray.push(0.5);
+        limitInfArray.push(-0.5);
+    }
+
+    var ctx = document.getElementById("lineChart2").getContext("2d");
+    lineChart2 = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'SIN',
+            data: [],
+            pointRadius: 0,
+            backgroundColor: [
+                'rgba(25, 99, 132, 0.2)'
+            ],
+            borderColor: [
+                'rgba(1, 1, 255, 1)'
+            ],
+            borderWidth: 1.5
+        },
+        {
+            label: 'Tresh',
+            data: limitSupArray,
+            pointRadius: 0,
+            backgroundColor: [
+                'rgba(25,0, 0, 0)'
+            ],
+            borderColor: [
+                'rgba(1, 1, 255, 1)'
+            ],
+            borderWidth: 1
+        } ,
+        {
+            label: 'Tresh',
+            data: limitInfArray,
+            pointRadius: 0,
+            backgroundColor: [
+                'rgba(25,0, 0, 0)'
+            ],
+            borderColor: [
+                'rgba(1, 1, 255, 1)'
+            ],
+            borderWidth: 1
+        }
+        ]
+    },
+    options: {
+        scales: {
+        yAxes: [{
+                ticks: {
+
+                    suggestedMin: -1.5,
+                    suggestedMax: 1.5
+                },
+                stacked: false
+            }],
+            xAxes: [{
+            ticks: {
+          maxTicksLimit: 4.1,
+          maxRotation: 0,
+          minRotation: 0
+        }
+        }]
+        },
+        animation: {
+            duration: 0
+        }
+    }
+});
+
+}
+
+
 
 function addData(chart, label, data) {
  
