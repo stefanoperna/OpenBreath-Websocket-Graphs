@@ -14,7 +14,7 @@ app.config['DEBUG'] = True
 
 
 #serial data
-ser = serial.Serial(port='/dev/ttyS0',
+arduino = serial.Serial(port='/dev/ttyS0',
                     baudrate = 9600,
                     parity=serial.PARITY_NONE,
                     stopbits=serial.STOPBITS_ONE,
@@ -34,20 +34,29 @@ def NumberGenerator():
     Ideally to be run in a separate thread?
     """
     #infinite loop of magical random numbers
-    print("Making random numbers")
+    print("Starting to receive data")
     while not thread_stop_event.isSet():
-        # send an R to the arduino
-        ser.write("R".encode())
-        #read data from arduino culls end of line
-        myData =   ser.readline()
-        #turns bytes into floats
-        number = float(myData.decode()[:-1])
 
-        print(number)
-        
+
+        lista = []
+        while True:
+
+            data = arduino.read()
+            if data:
+                if data == b'f':
+                    data2 = arduino.read(4)
+
+                    lista.append(struct.unpack('f',data2)[0])
+                    pass
+                if data == b';':
+                    break
+                else:
+                    pass
+
+        print(lista)
         now = datetime.now()
         timestamp = now.strftime("%H:%M:%S")
-        socketio.emit('newnumber', {'number': number, 'timestamp': timestamp}, namespace='/test')
+        socketio.emit('newnumber', {'sin': lista[0], 'cos': lista[1], 'tan':lista[2], 'timestamp': timestamp}, namespace='/test')
 
         socketio.sleep(0.1)
 
@@ -75,3 +84,5 @@ def test_disconnect():
 
 if __name__ == '__main__':
     socketio.run(app)
+
+
