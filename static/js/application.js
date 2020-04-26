@@ -86,6 +86,7 @@ function createGraph1() {
         ]
     },
     options: {
+        // next two lines provide responsive proportions for fitting inside CSS containers
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -170,7 +171,6 @@ function createGraph2() {
         ]
     },
     options: {
-        
         // next two lines provide responsive proportions for fitting inside CSS containers
         reponsive: true,
         maintainAspectRatio: false,
@@ -255,6 +255,7 @@ function createGraph3() {
         ]
     },
     options: {
+        // next two lines provide responsive proportions for fitting inside CSS containers
         responsive: true,
         maintainAspectRatio: false,
         scales: {
