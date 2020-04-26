@@ -86,6 +86,8 @@ function createGraph1() {
         ]
     },
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
         yAxes: [{
                 ticks: {
@@ -168,6 +170,10 @@ function createGraph2() {
         ]
     },
     options: {
+        
+        // next two lines provide responsive proportions for fitting inside CSS containers
+        reponsive: true,
+        maintainAspectRatio: false,
         scales: {
         yAxes: [{
                 ticks: {
@@ -249,6 +255,8 @@ function createGraph3() {
         ]
     },
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
         yAxes: [{
                 ticks: {
@@ -369,3 +377,4 @@ function addData2(chart, label, data) {
     chart.update();
 
 }
+
