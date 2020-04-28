@@ -1,11 +1,6 @@
 var lineChart;
 var lineChart2;
 var lineChart3;
-var count;
-var count1;
-var count2;
-var limSup = 0.5;
-var limInf = -0.3;
 
 const SAMPLE_NUM = 300;
 
@@ -13,19 +8,18 @@ $(document).ready(function(){
     //connect to the socket server.
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
     var numbers_received = [];
-    count = 0;
-    count1 = 0;
-    count2 = 0;
+    var count = 0;
+    var count1 = 0;
+    var count2 = 0;
     
     createGraph1();
     createGraph2();
     createGraph3();
     //receive details from server
     socket.on('newnumber', function(msg) {
-
-          addData(lineChart,msg.timestamp,msg.sin);
-          addData1(lineChart1,msg.timestamp,msg.cos);
-          addData2(lineChart2,msg.timestamp,msg.tan);
+          count  = addData(lineChart,msg.timestamp,msg.sin, count, -0.5, 0.6);
+          count1 = addData1(lineChart1,msg.timestamp,msg.cos, -0.5, 0.6);
+          count2 = addData2(lineChart2,msg.timestamp,msg.tan, -0.5, 0.6);
  
     });
 
@@ -35,21 +29,24 @@ function createGraph1() {
 
     var limitSupArray = [];
     var limitInfArray = [];
+    var data =[];
+    var labels = [];
     var step;
-    var range =0;
-    for (step = 0; step < 300; step++) {
-        limitSupArray.push(0.5);
-        limitInfArray.push(-0.5);
+    for (step = 0; step < SAMPLE_NUM; step++) {
+        limitSupArray.push(null);
+        limitInfArray.push(null);
+        data.push(null);
+        labels.push("");
     }
 
     var ctx = document.getElementById("lineChart").getContext("2d");
     lineChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: [],
+        labels: labels,
         datasets: [{
             label: 'SIN',
-            data: [],
+            data: data,
             pointRadius: 0,
             backgroundColor: [
                 'rgba(25, 99, 132, 0.2)'
@@ -120,21 +117,24 @@ function createGraph2() {
 
     var limitSupArray = [];
     var limitInfArray = [];
+    var data =[];
+    var labels = [];
     var step;
-    var range =0;
-    for (step = 0; step < 300; step++) {
-        limitSupArray.push(0.5);
-        limitInfArray.push(-0.5);
+    for (step = 0; step < SAMPLE_NUM; step++) {
+        limitSupArray.push(null);
+        limitInfArray.push(null);
+        data.push(null);
+        labels.push("");
     }
 
     var ctx = document.getElementById("lineChart1").getContext("2d");
     lineChart1 = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: [],
+        labels: labels,
         datasets: [{
             label: 'SIN',
-            data: [],
+            data: data,
             pointRadius: 0,
             backgroundColor: [
                 'rgba(25, 99, 132, 0.2)'
@@ -204,21 +204,24 @@ function createGraph3() {
 
     var limitSupArray = [];
     var limitInfArray = [];
+    var data =[];
+    var labels = [];
     var step;
-    var range =0;
-    for (step = 0; step < 300; step++) {
-        limitSupArray.push(0.5);
-        limitInfArray.push(-0.5);
+    for (step = 0; step < SAMPLE_NUM; step++) {
+        limitSupArray.push(null);
+        limitInfArray.push(null);
+        data.push(null);
+        labels.push("");
     }
 
     var ctx = document.getElementById("lineChart2").getContext("2d");
     lineChart2 = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: [],
+        labels: labels,
         datasets: [{
             label: 'SIN',
-            data: [],
+            data: data,
             pointRadius: 0,
             backgroundColor: [
                 'rgba(25, 99, 132, 0.2)'
@@ -286,11 +289,13 @@ function createGraph3() {
 
 
 
-function addData(chart, label, data) {
+function addData(chart, label, data, count, lim_inf, lim_sup) {
     const NULL_NUM = 5;
     if (count < SAMPLE_NUM-NULL_NUM){
       chart.data.labels[count] = label;
       chart.data.datasets[0].data[count] = data;
+      chart.data.datasets[1].data[count] = lim_sup;
+      chart.data.datasets[2].data[count] = lim_inf;
       var i;
       for (i = 1; i < NULL_NUM; i++) {
           chart.data.datasets[0].data[count+i] = null;
@@ -299,83 +304,32 @@ function addData(chart, label, data) {
     }else{
          chart.data.labels[count] = label;
          chart.data.datasets[0].data[count] = data;
+         chart.data.datasets[1].data[count] = lim_sup;
+         chart.data.datasets[2].data[count] = lim_inf;
     }
-    if (data > limSup || data < limInf) {
+
+    chart.data.labels[0] = "";
+    chart.data.labels[SAMPLE_NUM-1] = "";
+
+    if (data > lim_inf && data < lim_sup) {
         chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
         chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
     } else {
         chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
         chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
     }
+
 
     count = count + 1;
     if (count == SAMPLE_NUM){
        count = 0;
     }
 
-    chart.update();
-
-}
-
-function addData1(chart, label, data) {
-    const NULL_NUM = 5;
-    if (count1 < SAMPLE_NUM-NULL_NUM){
-      chart.data.labels[count1] = label;
-      chart.data.datasets[0].data[count1] = data;
-      var i;
-      for (i = 1; i < NULL_NUM; i++) {
-          chart.data.datasets[0].data[count1+i] = null;
-      } 
-      
-    }else{
-         chart.data.labels[count1] = label;
-         chart.data.datasets[0].data[count1] = data;
-    }
-    if (data > limSup || data < limInf) {
-        chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
-        chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
-    } else {
-        chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
-        chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
-    }
-
-    count1 = count1 + 1;
-    if (count1 == SAMPLE_NUM){
-       count1 = 0;
-    }
 
     chart.update();
-
+    
+    return count;
 }
 
-function addData2(chart, label, data) {
-    const NULL_NUM = 5;
-    if (count2 < SAMPLE_NUM-NULL_NUM){
-      chart.data.labels[count2] = label;
-      chart.data.datasets[0].data[count2] = data;
-      var i;
-      for (i = 1; i < NULL_NUM; i++) {
-          chart.data.datasets[0].data[count2+i] = null;
-      } 
-      
-    }else{
-         chart.data.labels[count2] = label;
-         chart.data.datasets[0].data[count2] = data;
-    }
-    if (data > limSup || data < limInf) {
-        chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
-        chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
-    } else {
-        chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
-        chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
-    }
 
-    count2 = count2 + 1;
-    if (count2 == SAMPLE_NUM){
-       count2 = 0;
-    }
-
-    chart.update();
-
-}
 
