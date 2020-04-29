@@ -18,9 +18,12 @@ $(document).ready(function(){
     //receive details from server
     socket.on('newnumber', function(msg) {
           count  = addData(lineChart,msg.timestamp,msg.sin, count, -0.5, 0.6);
-          count1 = addData1(lineChart1,msg.timestamp,msg.cos, -0.5, 0.6);
-          count2 = addData2(lineChart2,msg.timestamp,msg.tan, -0.5, 0.6);
- 
+          count1 = addData(lineChart1,msg.timestamp,msg.cos, count1, -0.5, 0.6);
+          count2 = addData(lineChart2,msg.timestamp,msg.tan, count2, -0.5, 0.6);
+          dataReplacer("OB_PEEP", msg.sin);
+        dataReplacer("OB_FlowMean", msg.cos);
+        dataReplacer("OB_PPeak", msg.tan);
+        
     });
 
 });
@@ -287,6 +290,22 @@ function createGraph3() {
 
 }
 
+function roundToTwo(num) {    
+    return +(Math.round(num + "e+2")  + "e-2");
+}
+
+
+function dataReplacer(id, socketValue) {
+    var element = document.getElementById(id);
+    if ((typeof element === 'undefined') || (element !== socketValue)) {
+        element.innerHTML = roundToTwo(socketValue);
+    }
+    else {
+    } 
+}
+
+
+
 
 
 function addData(chart, label, data, count, lim_inf, lim_sup) {
@@ -312,11 +331,11 @@ function addData(chart, label, data, count, lim_inf, lim_sup) {
     chart.data.labels[SAMPLE_NUM-1] = "";
 
     if (data > lim_inf && data < lim_sup) {
-        chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0.5)';
-        chart.data.datasets[0].borderColor[0] = 'rgba(255, 99, 99, 1)';
+        chart.data.datasets[0].backgroundColor[0] = 'rgba(255, 99, 132, 0)';
+        chart.data.datasets[0].borderColor[0] = 'rgba(0, 192, 255, 1)';
     } else {
-        chart.data.datasets[0].backgroundColor[0] = 'rgba(25, 99, 132, 0.2)';
-        chart.data.datasets[0].borderColor[0] = 'rgba(1, 1, 255, 1)';
+        chart.data.datasets[0].backgroundColor[0] = 'rgba(0, 192, 255,  0)';
+        chart.data.datasets[0].borderColor[0] = 'rgba(0, 192, 255, 1)';
     }
 
 
@@ -330,6 +349,3 @@ function addData(chart, label, data, count, lim_inf, lim_sup) {
     
     return count;
 }
-
-
-
