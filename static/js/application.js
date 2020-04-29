@@ -20,9 +20,9 @@ $(document).ready(function(){
           count  = addData(lineChart,msg.timestamp,msg.sin, count, -0.5, 0.6);
           count1 = addData(lineChart1,msg.timestamp,msg.cos, count1, -0.5, 0.6);
           count2 = addData(lineChart2,msg.timestamp,msg.tan, count2, -0.5, 0.6);
-          dataReplacer("OB_PEEP", msg.sin);
-        dataReplacer("OB_FlowMean", msg.cos);
-        dataReplacer("OB_PPeak", msg.tan);
+          $("#OB_PEEP").html(msg.sin);
+          $("#OB_FlowMean").html(msg.con);
+          $("#OB_PPeak").html(msg.tan);
         
     });
 
