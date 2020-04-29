@@ -1,12 +1,54 @@
 <html>
-    <head>
-    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <script src="static/js/application.js"></script>
+
+<head>
+
+
+
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <symbol id="icon-bell" viewBox="0 0 32 32">
+                <path d="M32.047 25c0-9-8-7-8-14 0-0.58-0.056-1.076-0.158-1.498-0.526-3.532-2.88-6.366-5.93-7.23 0.027-0.123 0.041-0.251 0.041-0.382 0-1.040-0.9-1.891-2-1.891s-2 0.851-2 1.891c0 0.131 0.014 0.258 0.041 0.382-3.421 0.969-5.966 4.416-6.039 8.545-0.001 0.060-0.002 0.121-0.002 0.183 0 7-8 5-8 14 0 2.382 5.331 4.375 12.468 4.878 0.673 1.263 2.002 2.122 3.532 2.122s2.86-0.86 3.532-2.122c7.137-0.503 12.468-2.495 12.468-4.878 0-0.007-0.001-0.014-0.001-0.021l0.048 0.021zM25.82 26.691c-1.695 0.452-3.692 0.777-5.837 0.958-0.178-2.044-1.893-3.648-3.984-3.648s-3.805 1.604-3.984 3.648c-2.144-0.18-4.142-0.506-5.837-0.958-2.332-0.622-3.447-1.318-3.855-1.691 0.408-0.372 1.523-1.068 3.855-1.691 2.712-0.724 6.199-1.122 9.82-1.122s7.109 0.398 9.82 1.122c2.332 0.622 3.447 1.318 3.855 1.691-0.408 0.372-1.523 1.068-3.855 1.691z"></path>
+            </symbol>
+            <symbol id="icon-users" viewBox="0 0 36 32">
+                <path d="M24 24.082v-1.649c2.203-1.241 4-4.337 4-7.432 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h28c0-4.030-5.216-7.364-12-7.918z"></path>
+                <path d="M10.225 24.854c1.728-1.13 3.877-1.989 6.243-2.513-0.47-0.556-0.897-1.176-1.265-1.844-0.95-1.726-1.453-3.627-1.453-5.497 0-2.689 0-5.228 0.956-7.305 0.928-2.016 2.598-3.265 4.976-3.734-0.529-2.39-1.936-3.961-5.682-3.961-6 0-6 4.029-6 9 0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h8.719c0.454-0.403 0.956-0.787 1.506-1.146z"></path>
+            </symbol>
+            <symbol id="icon-lock" viewBox="0 0 32 32">
+                <path d="M18.5 14h-0.5v-6c0-3.308-2.692-6-6-6h-4c-3.308 0-6 2.692-6 6v6h-0.5c-0.825 0-1.5 0.675-1.5 1.5v15c0 0.825 0.675 1.5 1.5 1.5h17c0.825 0 1.5-0.675 1.5-1.5v-15c0-0.825-0.675-1.5-1.5-1.5zM6 8c0-1.103 0.897-2 2-2h4c1.103 0 2 0.897 2 2v6h-8v-6z"></path>
+            </symbol>
+            <symbol id="icon-unlocked" viewBox="0 0 32 32">
+                <path d="M24 2c3.308 0 6 2.692 6 6v6h-4v-6c0-1.103-0.897-2-2-2h-4c-1.103 0-2 0.897-2 2v6h0.5c0.825 0 1.5 0.675 1.5 1.5v15c0 0.825-0.675 1.5-1.5 1.5h-17c-0.825 0-1.5-0.675-1.5-1.5v-15c0-0.825 0.675-1.5 1.5-1.5h12.5v-6c0-3.308 2.692-6 6-6h4z"></path>
+            </symbol>
+            <symbol id="icon-cog" viewBox="0 0 32 32">
+                <path d="M29.181 19.070c-1.679-2.908-0.669-6.634 2.255-8.328l-3.145-5.447c-0.898 0.527-1.943 0.829-3.058 0.829-3.361 0-6.085-2.742-6.085-6.125h-6.289c0.008 1.044-0.252 2.103-0.811 3.070-1.679 2.908-5.411 3.897-8.339 2.211l-3.144 5.447c0.905 0.515 1.689 1.268 2.246 2.234 1.676 2.903 0.672 6.623-2.241 8.319l3.145 5.447c0.895-0.522 1.935-0.82 3.044-0.82 3.35 0 6.067 2.725 6.084 6.092h6.289c-0.003-1.034 0.259-2.080 0.811-3.038 1.676-2.903 5.399-3.894 8.325-2.219l3.145-5.447c-0.899-0.515-1.678-1.266-2.232-2.226zM16 22.479c-3.578 0-6.479-2.901-6.479-6.479s2.901-6.479 6.479-6.479c3.578 0 6.479 2.901 6.479 6.479s-2.901 6.479-6.479 6.479z"></path>
+            </symbol>
+            <symbol id="icon-aid-kit" viewBox="0 0 32 32">
+                <path d="M28 8h-6v-4c0-1.1-0.9-2-2-2h-8c-1.1 0-2 0.9-2 2v4h-6c-2.2 0-4 1.8-4 4v16c0 2.2 1.8 4 4 4h24c2.2 0 4-1.8 4-4v-16c0-2.2-1.8-4-4-4zM12 4h8v4h-8v-4zM24 22h-6v6h-4v-6h-6v-4h6v-6h4v6h6v4z"></path>
+            </symbol>
+            <symbol id="icon-stats-bars" viewBox="0 0 32 32">
+                <path d="M0 26h32v4h-32zM4 18h4v6h-4zM10 10h4v14h-4zM16 16h4v8h-4zM22 4h4v20h-4z"></path>
+            </symbol>
+        </defs>
+    </svg>
+
+
+
     <style>
+        :root {
+            --bd: #363636;
+            --fd: #202020;
+            --obblue: #00C0FF;
+            --activefont: #FFFFFF;
+            --inactivefont: #969696;
+        }
+
         * {
             box-sizing: border-box;
 
@@ -22,24 +64,79 @@
         [class*="col-"] {
 
             float: left;
-height: 100%        }
+            height: 100%
+        }
+
+
+        .icons {
+            float: right;
+
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        .userbox {
+            display: inline-block;
+            position: relative;
+            height: 2.5em;
+            width: 18em;
+            border-radius: 2.5em;
+            margin-right: 10px;
+            background-color: var(--fd);
+            padding-left: 2em;
+            padding-right: 2em;
+            float: left;
+            float: top;
+        }
+
+        .userbox ux {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
+            color: var(--activefont);
+            font-size: 1.2em;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 2.5em;
+            height: 2.5em;
+            margin-left: -left: 10px;
+            margin-right: 10px;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: var(--inactivefont);
+            align-content: center;
+        }
+
+        .icon:hover {
+            fill: var(--obblue);
+        }
+
+
+        .icon-stats-bars {
+            fill: var(--obblue);
+        }
+
 
         .row {
-            height: 90%;
-            background-color: #2D2E30;
+            height: 97%;
             margin: 0;
             margin-top: 0;
             margin-bottom: 0;
             box-sizing: content-box;
-
-
         }
 
         html {
 
             font-family: "Lucida Sans", sans-serif;
             height: 100vh;
-            background-color: #2D2E30;
+            background-color: var(--bd);
             padding: 0px;
             padding-left: 0;
             margin: 0 !important;
@@ -48,56 +145,205 @@ height: 100%        }
         }
 
         body {
-            height: 90%;
+            font-size: 8px;
+            height: 95%;
             padding: 0;
             padding-left: 0;
-
         }
-        
+
         canvas {
             height: 100%;
             width: 100%;
         }
 
+        .title {
+            font-family: sans-serif;
+            font-size: 2em;
+            font-weight: 600;
+            color: #00C0FF;
+        }
 
-        .header {
-            color: #ffffff;
-            height: 10%;
-            margin-left: 0;
+        .subtitle {
+            font-family: sans-serif;
+            font-size: 1.5em;
+            font-weight: 300;
+            color: #00C0FF;
+            margin-left: 10px;
         }
 
 
+        .header {
+            height: 5%;
+            margin-left: 0;
+            padding: 5px;
+        }
 
         .gp {
             box-sizing: border-box;
-            padding: 10px;
+            padding: 3px;
             height: 33.33%;
             color: #EDEDED;
-            background-color: #000000;
-            width: 100%;
+        }
+
+
+
+        .f8 {
+            box-sizing: border-box;
+            padding: 3px;
+            height: 12.5%;
+            color: #EDEDED;
+        }
+
+
+        .f8 {
+            box-sizing: border-box;
+            padding: 3px;
+            height: 12.5%;
+            color: #EDEDED;
+        }
+
+        .f9 {
+            box-sizing: border-box;
+            padding: 3px;
+            height: 11.1%;
+            color: #EDEDED;
+        }
+
+        .f15 {
+            box-sizing: border-box;
+            padding: 3px;
+            height: 15%;
+        }
+
+        .f22 {
+            box-sizing: border-box;
+            padding: 3px;
+            height: 22.5%;
+        }
+
+        .f35 {
+            box-sizing: border-box;
+            padding: 3px;
+            height: 35%;
+        }
+
+        .rounder {
+            border-radius: 5px;
+            background-color: var(--fd);
+        }
+
+        .set {
+            background-color: dimgrey
+        }
+
+        .push {
+            background-color: var(--obblue)
+        }
+
+
+        .minititle {
+            box-sizing: border-box;
+            font-weight: 500;
+            padding-top: 5;
+            font-size: 1.5em;
+            color: #EDEDED;
+            font-family: sans-serif;
+            text-align: center;
+            height: 20%;
+        }
+
+
+
+        .number {
+            box-sizing: border-box;
+            padding: 2px;
+            color: #EDEDED;
+            font-family: sans-serif;
+            height: 80%;
             position: relative;
+
+            text-align: center;
+
+        }
+
+        .number n {
+            float: none;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--activefont);
+        }
+
+        uu {
+            font-size: 4em;
+            display: inline-block;
+
         }
 
 
+        vv {
 
-        .f6 {
-            box-sizing: border-box;
-            padding: 10px;
-            height: 16.66%;
+            color: var(--activefont);
+            display: inline-block;
+            font-size: 1.5em;
+            font-weight: 300;
+            color: var(--inactivefont);
+
+
+
+        }
+
+        .padder {
+            padding-bottom: 20px box-sizing: border-box;
+            height: 60%;
+        }
+
+
+        .info {
             color: #EDEDED;
-            background-color: #000000;
-        }
-        
-        .f3 {
+            font-family: sans-serif;
+            padding-left: 12px;
+            padding-right: 12px;
             box-sizing: border-box;
-            padding: 10px;
-            height: 33.33%;
-            color: #EDEDED;
-            background-color: #000000;
+            height: 20%;
         }
 
+        .alertlist {
+            color: #EDEDED;
+            font-family: sans-serif;
+            overflow: auto;
+            padding-left: 12px;
+            padding-right: 12px;
+            box-sizing: border-box;
+            height: 80%;
+            margin-bottom: 20px;
+        }
 
+        li {
+            list-style-type: none;
+            box-sizing: border-box;
+            font-size: 1.2em;
+            color: #EDEDED;
+            font-family: sans-serif;
+        }
 
+        li:hover {
+            background-color: var(--obblue);
+        }
+
+        .lineChart {
+
+            box-sizing: border-box;
+            font-size: 3.6em;
+            color: #EDEDED;
+            font-family: sans-serif;
+            text-align: center;
+            height: 80%;
+        }
+
+        .rounder push:hover {
+            fill: white;
+        }
 
 
 
@@ -119,71 +365,339 @@ height: 100%        }
             width: 15%;
         }
 
-
-
         @media only screen and (max-width: 768px) {
 
             /* For mobile phones: */
 
-            .* {
-
-                margin: 0
-                padding: 0;
-            }
+            .* {}
 
             [class*="col-"] {
+                margin-top: 10px;
                 width: 100%;
                 box-sizing: border-box;
 
 
             }
+
+            @media only screen and (max-width: 480px) {
+
+                /* For mobile phones: */
+
+                .* {}
+
+
+                .header {
+                    height: 5%;
+                    margin-left: 0;
+                    padding: 5px;
+                }
+
+                .icon {
+                    display: inline-block;
+                    width: 1.5em;
+                    height: 1.5em;
+                    margin-left: -left: 5px;
+                    margin-right: 5px;
+                    stroke-width: 0;
+                    stroke: currentColor;
+                    fill: var(--inactivefont);
+                    align-content: center;
+                }
+
+                .userbox {
+
+                    display: none;
+                }
     </style>
 </head>
 <div class="header">
-    <h1>Open Breath</h1>
+    <div class="topnav">
+        <a class="title">Open Breath </a>
+        <div class="icons">
+            <div class="userbox">
+                <ux>Pietro Arina</ux>
+            </div>
+
+            <svg class="icon icon-users">
+                <use xlink:href="#icon-users"></use>
+            </svg>
+
+            <svg class="icon icon-stats-bars">
+                <use xlink:href="#icon-stats-bars"></use>
+            </svg>
+
+            <svg class="icon icon-aid-kit">
+                <use xlink:href="#icon-aid-kit"></use>
+            </svg>
+
+            <svg class="icon icon-cog">
+                <use xlink:href="#icon-cog"></use>
+            </svg>
+
+            <svg class="icon icon-bell">
+                <use xlink:href="#icon-bell"></use>
+            </svg>
+
+            <svg class="icon icon-lock">
+                <use xlink:href="#icon-lock"></use>
+            </svg>
+
+        </div>
+    </div>
+
+
+
+
 </div>
+
 
 <body>
 
 
+    
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="static/js/application.js"></script>
+    <script src="static/js/textFit.js"></script>
+
+    
+    
 
     <div class="row">
-        <div class="col-3 graphi">
-              <div class="gp">
-                    <canvas id="lineChart"></canvas>
-                </div>
-                <div class="gp">
-                    <canvas id="lineChart1"></canvas>
-                </div>
-                <div class="gp">
-                    <canvas id="lineChart2"></canvas>
-                </div>
 
 
+
+        <div class="col-3">
+            <div class="gp">
+                <div class="rounder">
+                    <div class="minititle">Volume</div>
+                    <div class="lineChart">
+                        <canvas id="lineChart"></canvas>
+
+                    </div>
+                </div>
+            </div>
+            <div class="gp">
+                <div class="rounder">
+                    <div class="minititle">Pressure</div>
+                    <div class="lineChart">
+                        <canvas id="lineChart1"></canvas>
+
+                    </div>
+                </div>
+            </div>
+            <div class="gp">
+                <div class="rounder">
+                    <div class="minititle">Flow</div>
+                    <div class="lineChart">
+                        <canvas id="lineChart2"></canvas>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="col-4 menu">
 
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
-                <div class="f3">The City</div>
-  
+
+
+        <div class="col-4">
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">Mode</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_mode"></uu>
+                            <vv>cmh2o</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">Vt</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_Volume">12</uu>
+                            <vv>mL</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">PPeak</div>
+                    <div class="number">
+                        <n>
+                            <uu id="OB_PPeak">12</uu>
+                            <vv>cmH2O</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">PEEP</div>
+                    <div class="number">
+                        <n>
+                            <uu id ="OB_PEEP">aadf</uu>
+                            <vv>cmH2O</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">PMean</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_PMean"></uu>
+                            <vv>cmH2O</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">Flow Mean</div>
+                    <div class="number">
+                        <n>
+                            <uu id="OB_FlowMean">11</uu>
+                            <vv>mL/min</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">O2</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_O2"></uu>
+                            <vv>%</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder">
+                    <div class="minititle">Compliance</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_Compliance"></uu>
+                            <vv>L/cmH2O</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+
+
+
+
 
 
         </div>
 
         <div class="col-5 menu">
 
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
-                <div class="f6">The City</div>
+            <div class="f22">
+                <div class="rounder">
+                    <div class="minititle">Log</div>
+                    <div class="info">Letto 24, Stanza 23</div>
+                    <div class="padder">
+                        <div class="alertlist">
+                            <li>28/04 19:47:28 Tachypnea </li>
+                            <li>28/04 19:21:23 Auto PEEP </li>
+                            <li>28/04 19:47:55 Tachypnea </li>
+                            <li>28/04 19:12:43 Tachypnea </li>
+                            <li>28/04 16:47:32 Tachypnea </li>
+                            <li>28/04 13:41:28 Higher Peak Pressure </li>
+                            <li>28/04 11:22:33 Low O2 Levels </li>
+                            <li>28/04 10:47:23 Tachypnea </li>
+                            <li>28/04 09:22:33 Low O2 Levels </li>
+                            <li>28/04 03:11:28 Low O2 Levels </li>
+                            <li>28/04 03:11:28 Low O2 Levels </li>
+                            <li>28/04 03:11:28 Low O2 Levels </li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder set">
+                    <div class="minititle">Set Volume</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_SetVolume"></uu>
+                            <vv>mL</vv>
+                        </n>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder set">
+                    <div class="minititle">Set Breaths per minute</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_SetBPM"></uu>
+                            <vv>BPM</vv>
+                        </n>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder set">
+                    <div class="minititle">Cutoff Pressure</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_SetCUtoffPressure"></uu>
+                            <vv>cmH2O</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder set">
+                    <div class="minititle">I:E Ratio</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_RatioI"></uu>
+                            <uu>:</uu>
+                            <uu class=" OB_RatopE"></uu>
+
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <div class="f8">
+                <div class="rounder set">
+                    <div class="minititle">Set Ramp Time</div>
+                    <div class="number">
+                        <n>
+                            <uu class="OB_SetRamp"></uu>
+                            <vv>%</vv>
+                        </n>
+                    </div>
+                </div>
+            </div>
+            <a href="http://google.com">
+                <div class="f15">
+                    <div class="rounder push">
+                        <div class="minititle">Emergency</div>
+                        <div class="number">
+                            <n>
+                                <uu>PUSH O2</uu>
+                            </n>
+                        </div>
+                    </div>
+                </div>
+            </a>
 
         </div>
     </div>
-</body>
-</html>
+</body></html>
